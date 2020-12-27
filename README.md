@@ -1,4 +1,4 @@
-## ClipToPng
+## Clip2Png
 
 クリップボードの画像データを画像ファイルに出力するWindows用コンソールアプリケーションです。  
 .NET Framework 4.7.2を使用しています。
@@ -6,18 +6,18 @@
 
 ### 使用方法
 
-ClipToPng [ファイル]
+Clip2Png [ファイル]
 
 ### 例
 ```ps
 # デスクトップにPicture.pngを出力
-ClipToPng
+Clip2Png
 
 # pngファイル出力
-CliptoPng \directory\MyPicture.png
+Clip2Png \directory\MyPicture.png
 
 # jpgファイル出力
-CliptoPng \directory\MyPicture.jpg
+Clip2Png \directory\MyPicture.jpg
 
 
 ```
