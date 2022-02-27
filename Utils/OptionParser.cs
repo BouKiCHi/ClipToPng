@@ -4,46 +4,67 @@ using System.Linq;
 
 namespace Utils {
     public class OptionParser {
-
-        public List<OptionInfo> OptionList;
-
-        public Dictionary<string, OptionInfo> OptionDictionary;
-        
+       
         public List<string> FileList;
 
-        public int MinimumFileCount;
-        public string CommandName;
+        public class OptionSetting {
+            /// <summary>
+            /// ヘルプ表示機能の使用
+            /// </summary>
+            public bool HelpOption = true;
 
-        public bool HelpOption = true;
+            public string CommandName { get; set; }
 
-        public OptionParser(string commandName, List<OptionInfo> optionList, int minimumFileCount = 0) {
-            CommandName = commandName;
-            OptionList = optionList;
-            OptionDictionary = OptionList.ToDictionary(x => x.Option);
-            MinimumFileCount = minimumFileCount;
+            public string RequiredCommand { get; set; }
+
+            public List<OptionInfo> OptionList { get; set; }
+            public int RequiredFileCount { get; set; } = 0;
+
+            public void ShowUsage() {
+                if (CommandName != null) {
+                    var FilePart = RequiredFileCount > 0 ? "File" : "[File]";
+
+                    var Options = "[Options...]";
+                    if (RequiredCommand != null) {
+                        Options = $"<{RequiredCommand}> {Options}";
+                    }
+
+                    Console.WriteLine($"Usage {CommandName} {Options} {FilePart}");
+                }
+
+                Console.WriteLine(" Options...");
+                foreach (var o in OptionList) {
+                    if (o.Description == null) continue;
+                    Console.WriteLine($" {o.OptionKey,-15} : {o.Description}");
+                }
+
+                if (HelpOption) {
+                    var Help = "-h, --help, -?";
+                    Console.WriteLine($" {Help,-15} : ヘルプ表示");
+                }
+            }
         }
 
-        public void ShowUsage() {
-            if (CommandName != null) {
-                var FilePart = MinimumFileCount > 0 ? "File" : "[File]";
-                Console.WriteLine($"Usage {CommandName} [Options...] {FilePart}");
-            }
 
-            Console.WriteLine(" Options...");
-            foreach (var o in OptionList) {
-                if (o.Description == null) continue;
-                Console.WriteLine($" {o.Option,-15} : {o.Description}");
-            }
 
-            if (HelpOption) {
-                var Help = "-h, --help, -?";
-                Console.WriteLine($" {Help, -15} : ヘルプ表示");
-            }
 
+        public OptionSetting Setting { get; }
+
+        public OptionParser(OptionSetting Setting) {
+            this.Setting = Setting;
         }
 
+        /// <summary>
+        /// 使用方法の表示
+        /// </summary>
+        public void ShowUsage() => Setting.ShowUsage();
+
+        /// <summary>
+        /// オプションのパース
+        /// </summary>
         public bool Parse(string[] CommandArgument) {
             FileList = new List<string>();
+            var OptionDictionary = Setting.OptionList.ToDictionary(x => x.OptionKey);
 
             for (int i = 0; i < CommandArgument.Length; i++) {
                 var a = CommandArgument[i];
@@ -52,7 +73,7 @@ namespace Utils {
                     continue;
                 }
 
-                if (HelpOption) {
+                if (Setting.HelpOption) {
                     if (a == "-?" || a == "-h" || a == "--help") {
                         ShowUsage();
                         return false;
@@ -73,7 +94,7 @@ namespace Utils {
                 i += args.Length;
             }
 
-            if (FileList.Count < MinimumFileCount) ShowUsage();
+            if (FileList.Count < Setting.RequiredFileCount) ShowUsage();
             return true;
         }
     }
@@ -82,7 +103,7 @@ namespace Utils {
         /// <summary>
         /// オプション指定 -a --mail など
         /// </summary>
-        public string Option;
+        public string OptionKey;
 
         /// <summary>
         /// 詳細 Usageで表示される
@@ -94,6 +115,9 @@ namespace Utils {
         /// </summary>
         public int ArgumentCount;
 
+        /// <summary>
+        /// 最大でArgumentCountで指定した数だけパラメータが渡される
+        /// </summary>
         public delegate void OptionHandler(string[] Argument);
 
         public OptionHandler Handler;
