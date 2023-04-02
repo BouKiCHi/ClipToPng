@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>True</UseWindowsForms>
+
+    <AssemblyName>Clip2Png</AssemblyName>
+    <RootNamespace>Clip2Png</RootNamespace>
+
+  </PropertyGroup>
+
+</Project>

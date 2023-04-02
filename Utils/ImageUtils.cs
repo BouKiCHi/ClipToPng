@@ -6,7 +6,7 @@ namespace Utils {
     class ImageUtils {
 
         [DllImport("user32.dll")]
-        public extern static uint GetClipboardSequenceNumber();
+        public extern static int GetClipboardSequenceNumber();
 
         public enum ImageFormatType {
             Png,

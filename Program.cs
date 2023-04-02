@@ -2,11 +2,11 @@
 
 namespace ClipToPng {
 
-    class Program {
+  class Program {
 
-        [STAThread]
-        static void Main(string[] args) {
-            new Clip2Png().Run(args);
-        }
+    [STAThread]
+    static void Main(string[] args) {
+      new Clip2Png().Run(args);
     }
+  }
 }

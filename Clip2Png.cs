@@ -22,7 +22,7 @@ namespace ClipToPng {
     bool Verbose = false;
 
     /// <summary>クリップ番号管理</summary>
-    private ClipSequence ClipSequence;
+    private ClipSequence ClipSequence = null;
 
     /// <summary>
     /// エントリポイント
@@ -121,14 +121,13 @@ namespace ClipToPng {
       }
 
       // イメージ取得
-      using (System.Drawing.Image ClipImage = Clipboard.GetImage()) {
-        if (ClipImage == null) {
-          Console.WriteLine("イメージが取得できませんでした。");
-          return true;
-        }
-
-        WriteImageToPath(ClipImage, ImageFile.FullName);
+      using var ClipImage = Clipboard.GetImage();
+      if (ClipImage == null) {
+        Console.WriteLine("イメージが取得できませんでした。");
+        return true;
       }
+
+      WriteImageToPath(ClipImage, ImageFile.FullName);
 
       return true;
     }

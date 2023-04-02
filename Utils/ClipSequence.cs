@@ -4,12 +4,12 @@ namespace ClipToPng {
   class ClipSequence {
     public int No = -1;
     public ClipSequence() {
-      No = (int)ImageUtils.GetClipboardSequenceNumber();
+      No = ImageUtils.GetClipboardSequenceNumber();
     }
 
     internal void WaitNext() {
       while(true) {
-        var NextNo = (int)ImageUtils.GetClipboardSequenceNumber();
+        var NextNo = ImageUtils.GetClipboardSequenceNumber();
 
         // 異なるシーケンス番号
         if (No != NextNo) {
